@@ -114,32 +114,71 @@ From these experiments:
 ### Repository Structure
 
 ```
-manual_ingestion/
-    ingest_legal_cases.py
-
-docling_ingestion/
-    ingest_with_docling.py
-
-samples/
-    example outputs from both pipelines
+legal-document-ingestion/
+│
+├── README.md                          # Main project overview
+├── .gitignore                         # Exclude data, logs, outputs
+│
+├── manual_ingestion/                  # Approach 1: Lightweight pipeline
+│   ├── README.md                      # Pipeline-specific docs
+│   ├── requirements.txt               # pdfplumber, pypdf, bijoy2unicode
+│   ├── ingest_legal_cases.py          # Main script
+│   └── data/
+│       ├── raw_cases/                 # Input PDFs
+│       └── extracted_cases/           # Output files
+│           ├── *.txt                  # Extracted text
+│           ├── *_metadata.json        # Metadata
+│           ├── processing_summary.json
+│           └── ingestion.log          # Logs
+│
+├── docling_ingestion/                 # Approach 2: Advanced pipeline
+│   ├── README.md                      # Pipeline-specific docs
+│   ├── requirements.txt               # docling, tqdm
+│   ├── ingest_with_docling.py         # Main script
+│   └── data/
+│       ├── raw_cases/                 # Input PDFs
+│       └── extracted_cases/           # Output files
+│           ├── *.md                   # Markdown output
+│           ├── *.json                 # Structured JSON
+│           ├── *_metadata.json        # Metadata
+│           ├── processing_summary.json
+│           └── ingestion.log          # Logs
+│
+└── samples/                           # Example outputs
+    ├── sample_output_pdfplumber.txt   # Manual pipeline result
+    ├── sample_output_docling.md       # Docling pipeline result
+    └── sample_metadata.json           # Sample metadata
 ```
 
 ---
 
+### Current Status
+
+✅ **Manual Pipeline (pdfplumber + bijoy2unicode)**: Fully working
+- Successfully processes PDFs with Bijoy Bengali text
+- Line-level selective conversion preserves English text
+- Tested on sample legal case PDF
+
+⚠️ **Docling Pipeline**: Requires PyTorch installation
+- Code is complete and ready to run
+- Requires additional ML framework dependencies
+- Not tested due to environment constraints
+
 ### Running the Pipelines
 
-#### Manual pipeline
+#### Manual pipeline (Working)
 
-```
+```bash
 cd manual_ingestion
 pip install -r requirements.txt
 python ingest_legal_cases.py
 ```
 
-#### Docling pipeline
+#### Docling pipeline (Requires PyTorch)
 
-```
+```bash
 cd docling_ingestion
+pip install torch  # Install PyTorch first
 pip install -r requirements.txt
 python ingest_with_docling.py
 ```
@@ -150,18 +189,20 @@ python ingest_with_docling.py
 
 Manual pipeline:
 
-- pdfplumber
-    
-- pypdf
-    
-- bijoy2unicode
-    
+- pdfplumber (>=0.10.0)
+- pypdf (>=3.17.0)
+- bijoy2unicode (>=0.1.0)
 
 Docling pipeline:
 
-- docling
-    
-- tqdm
+- docling (>=2.0.0) — **Requires PyTorch**
+- tqdm (>=4.66.0)
+
+**Note:** Docling requires PyTorch/TensorFlow for full functionality. Install with:
+```bash
+pip install torch  # or tensorflow
+pip install docling tqdm
+```
     
 
 ---

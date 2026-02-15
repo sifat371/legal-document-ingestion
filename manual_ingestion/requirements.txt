@@ -1,0 +1,3 @@
+pdfplumber>=0.10.0
+pypdf>=3.17.0
+bijoy2unicode>=0.1.0
